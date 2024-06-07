@@ -96,8 +96,7 @@ WHERE orderid is null and 2 > (SELECT COUNT(*)
 delete from librarian
 WHERE NOT EXISTS (SELECT *
                   FROM ordering
-                  WHERE librarian.LuserName = ordering.LuserName 
-                  AND EXTRACT(year FROM ordering.orderDate) > EXTRACT(year FROM ADD_MONTHS(SYSDATE, -48)));
+                  WHERE librarian.LuserName = ordering.LuserName);
 
 -- update the terms of the supplier
 UPDATE supplier
