@@ -1,6 +1,6 @@
 CREATE OR REPLACE PROCEDURE process_order(p_order_id IN INT) IS
   -- Variables for storing data
-  v_status VARCHAR2(20);
+  r_my_order ordering%Rowtype;
   v_book_id INT;
   v_reader_name VARCHAR2(20);
   v_highest_copy_code INT;
@@ -26,12 +26,18 @@ CREATE OR REPLACE PROCEDURE process_order(p_order_id IN INT) IS
 
 BEGIN
   -- Step 1: Update the status of the order from 'Shipped' to 'received'
-  SELECT status INTO v_status
-  FROM ordering
-  WHERE orderId = p_order_id;
+   BEGIN
+    SELECT * INTO r_my_order
+    FROM ordering
+    WHERE orderId = p_order_id;
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      RAISE e_order_not_found;
+  END;
   
-  IF v_status <> 'Shipped' THEN
-    DBMS_OUTPUT.PUT_LINE(v_status);
+  
+  IF r_my_order.status <> 'Shipped' THEN
+    DBMS_OUTPUT.PUT_LINE(r_my_order.status);
     RAISE e_invalid_status;
   END IF;
   
