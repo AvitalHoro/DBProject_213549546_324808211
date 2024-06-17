@@ -51,7 +51,7 @@ CREATE TABLE bookCopyInStock
   status varchar2(20),
   purchaseDate Date,
   BookID INT NOT NULL,
-  PRIMARY KEY (copyCode),
+  PRIMARY KEY (copyCode, bookID),
   FOREIGN KEY (BookID) REFERENCES book(BookID)
 );
 
