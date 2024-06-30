@@ -25,8 +25,8 @@ CREATE OR REPLACE PROCEDURE process_order(p_order_id IN INT) IS
   e_no_books_ordered EXCEPTION;
 
 BEGIN
-  -- Step 1: Update the status of the order from 'Shipped' to 'received'
-   BEGIN
+  -- Step 1: Update the status of the order from 'Shipped' to 'Delivered'
+  BEGIN
     SELECT * INTO r_my_order
     FROM ordering
     WHERE orderId = p_order_id;
@@ -35,9 +35,7 @@ BEGIN
       RAISE e_order_not_found;
   END;
   
-  
   IF r_my_order.status <> 'Shipped' THEN
-    DBMS_OUTPUT.PUT_LINE(r_my_order.status);
     RAISE e_invalid_status;
   END IF;
   
@@ -52,10 +50,12 @@ BEGIN
   -- Get the highest copy code
   SELECT NVL(MAX(copyCode), 0) INTO v_highest_copy_code FROM bookCopyInStock;
   
- 
   OPEN c_books_in_order;
+  FETCH c_books_in_order INTO v_book_id;
+  IF c_books_in_order%NOTFOUND THEN
+    RAISE e_no_books_ordered;
+  END IF;
   LOOP
-    FETCH c_books_in_order INTO v_book_id;
     EXIT WHEN c_books_in_order%NOTFOUND;
     
     v_highest_copy_code := v_highest_copy_code + 1;
@@ -65,6 +65,7 @@ BEGIN
     
     v_inserted_count := v_inserted_count + 1; -- Increment counter
     
+    FETCH c_books_in_order INTO v_book_id;
   END LOOP;
   CLOSE c_books_in_order;
   
@@ -73,12 +74,12 @@ BEGIN
   -- Step 3: Print names of readers whose book orders were in the order
   OPEN c_readers_for_order;
   LOOP
-      FETCH c_readers_for_order INTO v_reader_name;
-      EXIT WHEN c_readers_for_order%NOTFOUND;
-      
-      DBMS_OUTPUT.PUT_LINE('Reader Name: ' || v_reader_name);
-    END LOOP;
-    CLOSE c_readers_for_order;
+    FETCH c_readers_for_order INTO v_reader_name;
+    EXIT WHEN c_readers_for_order%NOTFOUND;
+    
+    DBMS_OUTPUT.PUT_LINE('Reader Name: ' || v_reader_name);
+  END LOOP;
+  CLOSE c_readers_for_order;
   
   DBMS_OUTPUT.PUT_LINE('Step 3: Printed names of readers whose book orders were in the order.');
   
@@ -92,4 +93,3 @@ EXCEPTION
   WHEN OTHERS THEN
     DBMS_OUTPUT.PUT_LINE('An unexpected error occurred: ' || SQLERRM);
 END process_order;
-/
