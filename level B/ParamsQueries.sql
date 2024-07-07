@@ -39,7 +39,7 @@ ORDER BY
 --Number of orders that suppliers delivered in a specific date range
 SELECT
   s.supName,
-  s.supphone,
+  s.sphone,
   COUNT(o.orderid) AS number_of_delivered_orders
 FROM
   ordering o
