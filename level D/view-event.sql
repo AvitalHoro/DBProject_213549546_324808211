@@ -42,27 +42,6 @@ WHERE
 ORDER BY
     e.EDate DESC;
 
---dispay the participant fron the view        
-SELECT
-    part.UserName AS ParticipantUserName,
-    p.MainPhone AS ParticipantPhone,
-    p.Mail AS ParticipantEmail,
-    COUNT(red.EID) AS NumberOfEvents
-FROM
-    RECENTEVENTDETAILS red
-JOIN
-    Event_Participant ep ON red.EID = ep.EID
-JOIN
-    Participant part ON ep.personid = part.personid
-JOIN
-    Person p ON part.personid = p.personid
-GROUP BY
-    part.UserName,
-    p.MainPhone,
-    p.Mail
-ORDER BY
-    NumberOfEvents DESC;
-
 --display the Activity operators of the cheapest events  
 SELECT
     p.Pname AS OperatorName,
@@ -83,6 +62,27 @@ WHERE
     red.Price < 500 AND red.OperatorExpertise = 'Yoga guide'
 ORDER BY
     red.Price ASC;
+
+--dispay the participants in the events        
+SELECT
+    part.UserName AS ParticipantUserName,
+    p.MainPhone AS ParticipantPhone,
+    p.Mail AS ParticipantEmail,
+    COUNT(red.EID) AS NumberOfEvents
+FROM
+    RECENTEVENTDETAILS red
+JOIN
+    Event_Participant ep ON red.EID = ep.EID
+JOIN
+    Participant part ON ep.personid = part.personid
+JOIN
+    Person p ON part.personid = p.personid
+GROUP BY
+    part.UserName,
+    p.MainPhone,
+    p.Mail
+ORDER BY
+    NumberOfEvents DESC;
 
 
 
