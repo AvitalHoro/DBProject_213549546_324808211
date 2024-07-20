@@ -188,7 +188,7 @@ ALTER TABLE Person_More_Phone
 ADD CONSTRAINT fk_pmp_personid
 FOREIGN KEY (personId) REFERENCES person(personId);
 
---Deleting the column of main_phone
+--delete check constraint from the mainphone column before we delete it
 SELECT a.constraint_name, a.constraint_type, a.status, a.owner, a.table_name, b.column_name FROM all_constraints a JOIN all_cons_columns b ON a.owner = b.owner AND a.constraint_name = b.constraint_name WHERE a.table_name = 'PERSON' AND b.column_name = 'MAINPHONE';  
 ALTER TABLE person DROP CONSTRAINT SYS_C009713;
 
