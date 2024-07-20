@@ -130,64 +130,6 @@ ALTER TABLE ActivityOperator ADD CONSTRAINT ao_key PRIMARY KEY (personId);
 
 ALTER TABLE participant ADD CONSTRAINT participant_key PRIMARY KEY (personId);
 
---Adding the foreign key constraint where we deleted itALTER TABLE Event_Participant
-ADD CONSTRAINT fk_Event_Participant_personid
-FOREIGN KEY (personId) REFERENCES Participant(personId)
-ON UPDATE CASCADE;
-
-ALTER TABLE Event
-ADD CONSTRAINT fk_Event_personid
-FOREIGN KEY (personId) REFERENCES Manager(personId)
-ON UPDATE CASCADE;
-
-ALTER TABLE Event_Operator
-ADD CONSTRAINT fk_Event_Operator_personid
-FOREIGN KEY (personId) REFERENCES ActivityOperator(personId)
-ON UPDATE CASCADE;
-
-ALTER TABLE Manager_Working_Days
-ADD CONSTRAINT fk_mwd_personid
-FOREIGN KEY (personId) REFERENCES Manager(personId)
-ON UPDATE CASCADE;
-
-ALTER TABLE Manager
-ADD CONSTRAINT fk_Manager_personid
-FOREIGN KEY (personId) REFERENCES person(personId)
-ON UPDATE CASCADE;
-
-ALTER TABLE ActivityOperator
-ADD CONSTRAINT fk_ActivityOperator_personid
-FOREIGN KEY (personId) REFERENCES person(personId)
-ON UPDATE CASCADE;
-
-ALTER TABLE participant
-ADD CONSTRAINT fk_participant_personid
-FOREIGN KEY (personId) REFERENCES person(personId)
-ON UPDATE CASCADE;
-
-ALTER TABLE Person_More_Phone
-ADD CONSTRAINT fk_pmp_personid
-FOREIGN KEY (personId) REFERENCES person(personId)
-ON UPDATE CASCADE;
-
---Deleting the column of main_phone
-SELECT a.constraint_name, a.constraint_type, a.status, a.owner, a.table_name, b.column_name FROM all_constraints a JOIN all_cons_columns b ON a.owner = b.owner AND a.constraint_name = b.constraint_name WHERE a.table_name = 'PERSON' AND b.column_name = 'MAINPHONE';  
-ALTER TABLE person DROP CONSTRAINT SYS_C009713;
-
-
-
-ALTER TABLE Event DROP COLUMN mainphone;
-
-
-
-ALTER TABLE Manager DROP COLUMN mainphone;
-
-ALTER TABLE ActivityOperator DROP COLUMN mainphone;
-
-ALTER TABLE participant DROP COLUMN mainphone;
-
-
-
 --Deleting the constraint from tables where the primary key is a pair of values
 
 ALTER TABLE Event_Participant
@@ -213,6 +155,65 @@ DROP CONSTRAINT SYS_C009770;
 
 ALTER TABLE Person_More_Phone
 ADD CONSTRAINT pk_person_more_phone PRIMARY KEY (More_Phone, personId);
+
+--Adding the foreign key constraint where we deleted itALTER TABLE Event_Participant
+ADD CONSTRAINT fk_Event_Participant_personid
+FOREIGN KEY (personId) REFERENCES Participant(personId);
+
+ALTER TABLE Event
+ADD CONSTRAINT fk_Event_personid
+FOREIGN KEY (personId) REFERENCES Manager(personId);
+
+ALTER TABLE Event_Operator
+ADD CONSTRAINT fk_Event_Operator_personid
+FOREIGN KEY (personId) REFERENCES ActivityOperator(personId);
+
+ALTER TABLE Manager_Working_Days
+ADD CONSTRAINT fk_mwd_personid
+FOREIGN KEY (personId) REFERENCES Manager(personId);
+
+ALTER TABLE Manager
+ADD CONSTRAINT fk_Manager_personid
+FOREIGN KEY (personId) REFERENCES person(personId);
+
+ALTER TABLE ActivityOperator
+ADD CONSTRAINT fk_ActivityOperator_personid
+FOREIGN KEY (personId) REFERENCES person(personId);
+
+ALTER TABLE participant
+ADD CONSTRAINT fk_participant_personid
+FOREIGN KEY (personId) REFERENCES person(personId);
+
+ALTER TABLE Person_More_Phone
+ADD CONSTRAINT fk_pmp_personid
+FOREIGN KEY (personId) REFERENCES person(personId);
+
+--Deleting the column of main_phone
+SELECT a.constraint_name, a.constraint_type, a.status, a.owner, a.table_name, b.column_name FROM all_constraints a JOIN all_cons_columns b ON a.owner = b.owner AND a.constraint_name = b.constraint_name WHERE a.table_name = 'PERSON' AND b.column_name = 'MAINPHONE';  
+ALTER TABLE person DROP CONSTRAINT SYS_C009713;
+
+
+--drop the mainphone column
+ALTER TABLE Event_Participant DROP COLUMN mainphone;
+
+ALTER TABLE Event DROP COLUMN mainphone;
+
+ALTER TABLE Event_Operator DROP COLUMN mainphone;
+
+ALTER TABLE Manager_Working_Days DROP COLUMN mainphone;
+
+ALTER TABLE Manager DROP COLUMN mainphone;
+
+ALTER TABLE ActivityOperator DROP COLUMN mainphone;
+
+ALTER TABLE participant DROP COLUMN mainphone;
+
+ALTER TABLE Person_More_Phone DROP COLUMN mainphone;
+
+
+
+
+
 
 
 
